@@ -81,4 +81,35 @@ public class RegistrationServiceTest {
     // Then
     assertThat(actualUser).isNull();
   }
+
+  @Test
+  @DisplayName("should throw an exception when uan number is negative")
+  void shouldThrowAnExceptionWhenUanNumberIsNegative() {
+    // Given
+    User user = new User(-1, "Jhon Snow", "89029929201");
+    // When -Then
+    assertThatExceptionOfType(IllegalArgumentException.class)
+        .isThrownBy(() -> registrationService.register(user))
+        .withMessage("User uan number is invalid!");
+  }
+
+  @Test
+  @DisplayName("should throw an exception when uan number is zero")
+  void shouldThrowAnExceptionWhenUanNumberIsZero() {
+    // Given
+    User user = new User(0, "Jhon Snow", "89029929201");
+    // When -Then
+    assertThatExceptionOfType(IllegalArgumentException.class)
+        .isThrownBy(() -> registrationService.register(user))
+        .withMessage("User uan number is invalid!");
+  }
+
+  @Test
+  @DisplayName("should give false when user is not registered")
+  void shouldGiveFalseWhenUserIsNotRegistered() {
+    // Given
+    User user = new User(129, "Daenerys Targaryen", "89029929201");
+    // When - Then
+    assertThat(registrationService.isUserRegistered(user)).isFalse();
+  }
 }
