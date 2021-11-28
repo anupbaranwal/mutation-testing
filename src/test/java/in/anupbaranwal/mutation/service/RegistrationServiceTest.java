@@ -66,6 +66,19 @@ public class RegistrationServiceTest {
     // When
     User actualUser = registrationService.getRegisteredUser(15);
     // Then
-    assertThat(actualUser).isEqualTo(user);
+    assertThat(actualUser).extracting("uanNumber", "name", "contactNo")
+        .contains(user.getUanNumber(), user.getName(), user.getContactNo());
+  }
+
+  @Test
+  @DisplayName("should return null when wrong uan number is given")
+  void shouldReturnNullWhenWrongUanNumberIsGiven() {
+    // Given
+    User user = new User(15, "Tyrion Lannister", "89029929201");
+    registrationService.register(user);
+    // When
+    User actualUser = registrationService.getRegisteredUser(10);
+    // Then
+    assertThat(actualUser).isNull();
   }
 }
